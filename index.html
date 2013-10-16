@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+</head>
+<body>
+	<canvas id="canvas" width="300" height="300"></canvas>
+</body>
+<script src="graphtacular.js"></script>
+<script>
+	var context = document.getElementById('canvas').getContext('2d');
+	var graph = new Graphtacular(context, {'data':[{'label1': 10}, {'label2': 20}, {'label3': 30}, {'label3': 30}]});
+</script>
+</html>
