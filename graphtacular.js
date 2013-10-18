@@ -16,8 +16,8 @@ Graphtacular.prototype.animate = function (label, value) {
         var bar = this.data[i];
         var height = bar[Object.keys(bar)[0]];
         var bar_height = this._context.canvas.height * (height / 100);
-        this._context.fillRect(x, 200, bar_width - this.bar_padding, bar_height);
+        bar_height = -Math.abs(bar_height)
+        this._context.fillRect(x, 250, bar_width - this.bar_padding, bar_height);
         x += bar_width + this.bar_padding;
     };
 }
-
