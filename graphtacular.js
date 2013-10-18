@@ -14,10 +14,14 @@ Graphtacular.prototype.animate = function (label, value) {
     this._context.fillStyle = "blue";
     for (var i = 0; i < this.data.length; i++) {
         var bar = this.data[i];
-        var height = bar[Object.keys(bar)[0]];
+        var height = bar.value;
         var bar_height = this._context.canvas.height * (height / 100);
         bar_height = -Math.abs(bar_height)
         this._context.fillRect(x, 250, bar_width - this.bar_padding, bar_height);
         x += bar_width + this.bar_padding;
     };
+}
+
+Graphtacular.prototype.animateWidth = function () {
+    
 }
