@@ -10,6 +10,11 @@
 <script src="graphtacular.js"></script>
 <script>
 	var context = document.getElementById('canvas').getContext('2d');
-	var graph = new Graphtacular(context, {'data':[{'label1': 10}, {'label2': 20}, {'label3': 30}, {'label3': 30}]});
+	var graph = new Graphtacular(context, {'data':[{'label1': 10}, {'label2': 20}, {'label3': 30}, {'label4': 30}]});
+	window.setTimeout(function () {
+		console.log('sgash');
+		graph.data.push({'label5':50});
+		graph.animate();
+	}, 2000);
 </script>
 </html>
