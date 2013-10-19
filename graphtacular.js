@@ -3,14 +3,15 @@ function Graphtacular (context, options) {
     this.data = (options.data || []);
     this.bar_padding = 10;
     this.bar_width = 0;
-    //console.log(context);
     this.animate();
     this.bars = [];
     this.animateId;
 }
 
-Graphtacular.prototype.addBar = function(bar) {
-    this.bars.push(new Bar(this, bar.label, bar.value, 9));
+Graphtacular.prototype.addBars = function(bars) {
+    bars.forEach(function (bar) {
+        this.bars.push(new Bar(this, bar.label, bar.value, 0));
+    });
     this.animate();
 }
 
@@ -25,6 +26,7 @@ Graphtacular.prototype.changeBar = function(bar_name, value) {
 };
 
 Graphtacular.prototype.animate = function (label, value) {
+    console.log(this);
     this.bar_width = (this._context.canvas.width / this.bars.length) - this.bar_padding;
     this.animateWidth();
 
@@ -57,10 +59,9 @@ Graphtacular.prototype.animateWidth = function (self) {
             }
         }
     }
-
     if(changed) {
         return;
-        window.cancelRequestAnimationFrame(self.)
+        window.cancelRequestAnimationFrame(self.animateId);
     }
     window.requestAnimationFrame(this.animateWidth(self))
 }
