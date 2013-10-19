@@ -10,7 +10,7 @@ function Graphtacular (context, options) {
 }
 
 Graphtacular.prototype.addBar = function(bar) {
-    this.bars.push(new Bar(this, bar.label, bar.value, 9));
+    this.bars.push(new Bar(this, bar.label, bar.value, 0));
     this.animate();
 }
 
