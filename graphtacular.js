@@ -17,11 +17,13 @@ function Graphtacular (context, options) {
 }
 
 Graphtacular.prototype.addBars = function(bars) {
+    var self = this;
     bars.forEach(function (bar) {
-        if (this.bars == undefined) {
-            this.bars = [];
+        if (self.bars == undefined) {
+            self.bars = [];
         }
-        this.bars.push(new Bar(this, bar.label, bar.value, 0));
+        self.bars.push(new Bar(self, bar.label, bar.value, 0));
+        console.log(self.bars);
     });
 }
 
@@ -53,8 +55,8 @@ Graphtacular.prototype.drawFrame = function() {
         var height = bar.height;
         var bar_height = this._context.canvas.height * (height / 100);
         bar_height = -Math.abs(bar_height);
-        this._context.fillRect(x, 250, this.bar_width - this.bar_padding, bar_height);
-        x += this.bar_width + this.bar_padding;
+        this._context.fillRect(x, 250, bar.width - this.bar_padding, bar_height);
+        x += bar.width+ this.bar_padding;
     }
 }
 
