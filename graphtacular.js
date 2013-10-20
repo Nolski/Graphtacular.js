@@ -3,16 +3,26 @@ function Graphtacular (context, options) {
     this.data = (options.data || []);
     this.bar_padding = 10;
     this.bar_width = 0;
-    this.animate();
-    this.bars = [];
     this.animateId;
+    this.bars = null;
+    for(var i=0; i < this.data.length; i++) {
+        var bar = this.data[i];
+        if (this.bars == undefined) {
+            this.bars = [];
+        }
+        this.bars.push(new Bar(this, bar.label, bar.value));
+    };
+    console.log(this.bars);
+    this.animate(this);
 }
 
 Graphtacular.prototype.addBars = function(bars) {
     bars.forEach(function (bar) {
+        if (this.bars == undefined) {
+            this.bars = [];
+        }
         this.bars.push(new Bar(this, bar.label, bar.value, 0));
     });
-    this.animate();
 }
 
 Graphtacular.prototype.changeBar = function(bar_name, value) {
@@ -22,32 +32,33 @@ Graphtacular.prototype.changeBar = function(bar_name, value) {
             bar.value = value;
         }
     }
-    animate();
 };
 
-Graphtacular.prototype.animate = function (label, value) {
-    console.log(this);
-    this.bar_width = (this._context.canvas.width / this.bars.length) - this.bar_padding;
-    this.animateWidth();
-
-
-    canvas.width = canvas.width;
-    var x = this.bar_padding;
-    //console.log(bar_width);
-    this._context.fillStyle = "blue";
-    for (var i = 0; i < this.data.length; i++) {
-        var bar = this.data[i];
-        var height = bar.value;
-        var bar_height = this._context.canvas.height * (height / 100);
-        bar_height = -Math.abs(bar_height);
-        this._context.fillRect(x, 250, bar_width - this.bar_padding, bar_height);
-        x += bar_width + this.bar_padding;
-    };
+Graphtacular.prototype.animate = function (self) {
+    self.bar_width = (self._context.canvas.width / self.bars.length) - self.bar_padding;
+    self.animateWidth();
+    self.animateHeight();
+    self.drawFrame();
+    window.requestAnimationFrame(function () {
+        self.animate(self);
+    });
 }
 
-//not working
-Graphtacular.prototype.animateWidth = function (self) {
-    var self = (self || this);
+Graphtacular.prototype.drawFrame = function() {
+    canvas.width = canvas.width;
+    var x = this.bar_padding;
+    this._context.fillStyle = "blue";
+    for (var i = 0; i < this.bars.length; i++) {
+        var bar = this.bars[i];
+        var height = bar.height;
+        var bar_height = this._context.canvas.height * (height / 100);
+        bar_height = -Math.abs(bar_height);
+        this._context.fillRect(x, 250, this.bar_width - this.bar_padding, bar_height);
+        x += this.bar_width + this.bar_padding;
+    }
+}
+
+Graphtacular.prototype.animateWidth = function () {
     var changed = false;
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
@@ -59,13 +70,26 @@ Graphtacular.prototype.animateWidth = function (self) {
             }
         }
     }
-    if(changed) {
-        return;
-        window.cancelRequestAnimationFrame(self.animateId);
-    }
-    window.requestAnimationFrame(this.animateWidth(self))
-}
+};
 
-function Bar (graph, label, value, height) {
+Graphtacular.prototype.animateHeight = function() {
+    var changed = false;
+
+    for (var i = 0; i < this.bars.length; i++) {
+        var bar = this.bars[i];
+        if (bar.height != bar.value) {
+            changed = true;
+            bar.height += (bar.value - bar.height) * 0.05;
+            if (Math.abs(bar.height - bar.value) < 0.05) {
+                bar.height = bar.value;
+            }
+        }
+    };
+
+};
+
+function Bar (graph, label, value) {
     this.width = graph.bar_width;
+    this.value = value;
+    this.height = 0;
 }
