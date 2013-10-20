@@ -56,8 +56,7 @@ Graphtacular.prototype.drawFrame = function() {
     this._context.fillStyle = "blue";
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
-        var height = bar.height;
-        var bar_height = this._context.canvas.height * (height / 100);
+        var bar_height = this._context.canvas.height * (bar.height / 100);
         bar_height = -Math.abs(bar_height);
         this._context.fillRect(x, 250, bar.width - this.bar_padding, bar_height);
         x += bar.width+ this.bar_padding;
