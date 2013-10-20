@@ -38,8 +38,12 @@ Graphtacular.prototype.changeBar = function(bar_name, value) {
 
 Graphtacular.prototype.animate = function (self) {
     self.bar_width = (self._context.canvas.width / self.bars.length) - self.bar_padding;
-    self.animateWidth();
-    self.animateHeight();
+    var width_changed = self.animateWidth(),
+        height_finished = true;
+    console.log(width_changed);
+    if(!width_changed) {
+        height_finished = self.animateHeight();
+    }
     self.drawFrame();
     window.requestAnimationFrame(function () {
         self.animate(self);
@@ -64,34 +68,37 @@ Graphtacular.prototype.animateWidth = function () {
     var changed = false;
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
-        if (bar.width != this.bar_width) {
+        if (bar.width !== this.bar_width) {
+            //console.log(bar.width, this.bar_width);
             changed = true;
-            bar.width += (this.bar_width - bar.width) * 0.5;
-            if (Math.abs(bar.width - this.bar_width) < 2) {
+            bar.width += (this.bar_width - bar.width) * 0.05;
+            if (Math.abs(bar.width - this.bar_width) < 0.6) {
+                console.log('setting ==');
                 bar.width = this.bar_width;
             }
         }
     }
+    return changed;
 };
 
 Graphtacular.prototype.animateHeight = function() {
     var changed = false;
-
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
         if (bar.height != bar.value) {
             changed = true;
             bar.height += (bar.value - bar.height) * 0.05;
-            if (Math.abs(bar.height - bar.value) < 0.05) {
+            if (Math.abs(bar.height - bar.value) < 0.6) {
                 bar.height = bar.value;
             }
         }
     };
-
+    return changed;
 };
 
 function Bar (graph, label, value) {
     this.width = graph.bar_width;
     this.value = value;
+    this.label = label;
     this.height = 0;
 }
