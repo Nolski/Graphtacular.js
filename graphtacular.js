@@ -9,6 +9,7 @@ function Graphtacular (context, options) {
     this.max = -1;
     this.side_padding = 40;
     this.increment = 10;
+    this.text_color = (options.text_color || '#000');
     for(var i=0; i < this.data.length; i++) {
         var bar = this.data[i];
         if (this.bars == undefined) {
@@ -82,7 +83,7 @@ Graphtacular.prototype.getHighestValue = function() {
 Graphtacular.prototype.drawAxis = function() {
     this._context.beginPath();
     this._context.moveTo(this.side_padding - 5, 5);
-    this._context.lineTo(this.side_padding - 5, this._context.canvas.height);
+    this._context.lineTo(this.side_padding - 5, this._context.canvas.height - 10);
     this._context.lineWidth = 2;
     this._context.stroke();
     //this._context.endPath();
@@ -96,6 +97,7 @@ Graphtacular.prototype.drawAxis = function() {
         this._context.moveTo(this.side_padding - 10, y);
         this._context.lineTo(this.side_padding, y);
         this._context.stroke();
+        context.fillStyle = this.text_color;
         this._context.fillText(val, 0, y + 5);
         //this._context.endPath();
     };
@@ -105,15 +107,17 @@ Graphtacular.prototype.drawFrame = function() {
     canvas.width = canvas.width;
     var x = this.side_padding;
     //TODO: Here is where we will set all of the graph styling
-    this._context.fillStyle = "blue";
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
         //var bar_height = this._context.canvas.height * (bar.height / 100); //TODO: What is this
         //bar_height = -Math.abs(bar_height);
         //console.log(bar_height);
         var bar_height = this.getPixelHeight(bar.height);
-        console.log(-this._context.canvas.height);
-        this._context.fillRect(x, this._context.canvas.height - bar_height, bar.width, bar_height);
+        context.fillStyle = bar.color;
+        this._context.fillRect(x, this._context.canvas.height - 10 - bar_height, bar.width, bar_height);
+
+        context.fillStyle = this.text_color;
+        this._context.fillText(bar.label, x, this._context.canvas.height);
         x += bar.width+ this.bar_padding;
     }
 }
@@ -150,7 +154,9 @@ Graphtacular.prototype.animateHeight = function() {
 
 //TODO: Do a better job at normalizing bar heights when < canvas height
 //TODO: __defineGetter__ and __defineSetter__ are apparently depricated
-function Bar (graph, label, value) {
+function Bar (graph, label, value, options) {
+    var options = (options || {});
+    this.color = (options.color || '#0000FF');
     this.width = graph.bar_width;
     this.value = value;
     this.label = label;
