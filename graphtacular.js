@@ -1,3 +1,4 @@
+//TODO: Write a scale or something
 function Graphtacular (context, options) {
     this._context = context;
     this.data = (options.data || []);
@@ -66,7 +67,9 @@ Graphtacular.prototype.animate = function (self) {
 
 Graphtacular.prototype.drawFrame = function() {
     canvas.width = canvas.width;
-    var x = this.bar_padding;
+    var x = this.bar_padding + 50;
+
+    //TODO: Here is where we will set all of the graph styling
     this._context.fillStyle = "blue";
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
@@ -111,6 +114,7 @@ Graphtacular.prototype.animateHeight = function() {
 };
 
 //TODO: Do a better job at normalizing bar heights when < canvas height
+//TODO: __defineGetter__ and __defineSetter__ are apparently depricated
 function Bar (graph, label, value) {
     this.width = graph.bar_width;
     this.value = graph.getPixelHeight(value);
