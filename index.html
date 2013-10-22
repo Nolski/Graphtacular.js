@@ -22,30 +22,20 @@
 		{label: 'label4', value: 300}
 	]});*/
 	var slide = document.getElementById('slide');
-
+	var global_data = {};
 	slide.onchange = function (e) {
-			$.getJSON('monthavgs.json', function(data) {
-			var jsonData = [];
-			$.each(data, function() {
-				var average = this.avgs[slide.value];
-				var event = this.event;
-				if(average >= 1){
-					//console.log(event);
-					//console.log(average);
-					jsonData.push({label : event, value: average});
-				}
-			});
-			var jsonObj = {'data':jsonData};
-			console.log(slide.value);
-			graph = new Graphtacular(context,jsonObj);
-
-			//graph.data = jsonObj;
+		global_data.forEach(function (thing) {
+			var average = thing.avgs[slide.value];
+			if (average >= 1) {
+				graph.changeBar(thing.event, average);
+			};
 		});
 	};
 
 
 	$(document).ready(function(){
 		$.getJSON('monthavgs.json', function(data) {
+			global_data = data;
 			var jsonData = [];
 			$.each(data, function() {
 				var average = this.avgs[0];

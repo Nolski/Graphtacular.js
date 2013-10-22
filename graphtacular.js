@@ -35,8 +35,7 @@ Graphtacular.prototype.getPixelHeight = function(height) {
         return height;
     }
 
-    height = height;
-    height = Math.floor(height * (canvas_max / (this.max)))
+    height = Math.floor(height * (canvas_max / (this.max)));
 
     return height;
 };
@@ -55,7 +54,7 @@ Graphtacular.prototype.changeBar = function(bar_name, value) {
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
         if(bar.label == bar_name) {
-            bar.value = value;
+            bar.value = parseInt(value);
         }
     }
 };
@@ -149,6 +148,9 @@ Graphtacular.prototype.animateHeight = function() {
     var changed = false;
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
+        bar.height = parseInt(bar.height);
+        bar.value = parseInt(bar.value);
+        console.log(bar.height,  bar.value);
         if (bar.height != bar.value) {
             changed = true;
             bar.height += (bar.value - bar.height) * 0.05;
