@@ -3,15 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test</title>
+	<style>
+		body{
+				background: lightgrey;
+			}
+			#time input{
+				font-family: 'Arial';
+				font-size: 30px;
+				color: slategrey;
+				font-weight: 900;
+			}
+	</style>
 </head>
 <body>
 	<canvas id="canvas" width="800" height="300"></canvas>
-	<div id="slider">
-		January <input id="slide" type="range" min="0" max="11" step="1" value="0" /> December
-	</div>
+	
+	<div id = "time"></div>
 </body>
 <script src="graphtacular.js"></script>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="js/round-slider.min.js"></script>
+
 <script>
 	var context = document.getElementById('canvas').getContext('2d');
 	var graph;
@@ -49,6 +61,20 @@
 			var jsonObj = {'data':jsonData};
 			graph = new Graphtacular(context,jsonObj);
 		});
+		
+		
+		$('#time').round_slider({
+					list: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2],
+				
+					min: 0,
+					max: 359,
+					
+					bg: 'img/bg/watch.png',
+					handle_bg: 'img/handles/dot.png',
+					input_bg: 'img/input/glass.png',
+					points_bg: 'img/points/numerals.png',
+					
+				});
 	});
 
 
