@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test</title>
-</head> 
+</head>
 <body>
 	<canvas id="canvas" width="650" height="300"></canvas>
 	<div id="slider">
@@ -11,24 +11,44 @@
 	</div>
 </body>
 <script src="graphtacular.js"></script>
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script>
 	var context = document.getElementById('canvas').getContext('2d');
-	var graph = new Graphtacular(context, {'data':[
-		{label: 'label1', value: 50}, 
-		{label: 'label2', value: 100}, 
-		{label: 'label3', value: 200}, 
+	var graph;
+	/*var graph = new Graphtacular(context, {'data':[
+		{label: 'label1', value: 50},
+		{label: 'label2', value: 100},
+		{label: 'label3', value: 200},
 		{label: 'label4', value: 300}
-	]});
+	]});*/
 	window.setTimeout(function () {
 		graph.addBars([{label: 'label5', value:30}]);
 		graph.changeBar('label1', 40);
-	}, 4000); 
+	}, 4000);
 
 	var slide = document.getElementById('slide');
 
 	slide.onchange = function (e) {
 		console.log(slide.value);
 	};
+
+
+	$(document).ready(function(){
+		$.getJSON('monthavgs.json', function(data) {
+			var jsonData = [];
+			$.each(data, function() {
+				var average = this.avgs[0];
+				var event = this.event;
+				if(average >= 1){
+					//console.log(event);
+					//console.log(average);
+					jsonData.push({label : event, value: average});
+				}
+			});
+			var jsonObj = {'data':jsonData};
+			graph = new Graphtacular(context,jsonObj);
+		});
+	});
 
 
 </script>
