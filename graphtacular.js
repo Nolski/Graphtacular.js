@@ -114,7 +114,6 @@ Graphtacular.prototype.drawFrame = function() {
         var bar = this.bars[i];
         //var bar_height = this._context.canvas.height * (bar.height / 100); //TODO: What is this
         //bar_height = -Math.abs(bar_height);
-        //console.log(bar_height);
         var bar_height = this.getPixelHeight(bar.height);
         context.fillStyle = bar.color;
         context.fillRect(x, context.canvas.height - 10 - bar_height, bar.width, bar_height);
@@ -150,7 +149,6 @@ Graphtacular.prototype.animateHeight = function() {
         var bar = this.bars[i];
         bar.height = parseInt(bar.height);
         bar.value = parseInt(bar.value);
-        console.log(bar.height,  bar.value);
         if (bar.height != bar.value) {
             changed = true;
             bar.height += (bar.value - bar.height) * 0.05;
