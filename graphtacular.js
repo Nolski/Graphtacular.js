@@ -1,3 +1,7 @@
+
+Array.max = function (array) {
+    return Math.max.apply(Math, array);
+};
 //TODO: Write a scale or something
 function Graphtacular (context, options) {
     this._context = context;
@@ -9,6 +13,7 @@ function Graphtacular (context, options) {
     this.max = -1;
     this.side_padding = 40;
     this.increment = 10;
+    this.top_padding = 20;
     this.text_color = (options.text_color || '#000');
     for(var i=0; i < this.data.length; i++) {
         var bar = this.data[i];
@@ -56,6 +61,7 @@ Graphtacular.prototype.changeBar = function(bar_name, value) {
 };
 
 Graphtacular.prototype.animate = function (self) {
+    self.max = self.getHighestValue();
     self.bar_width = (self._context.canvas.width / self.bars.length) - (self.bar_padding) - (self.side_padding / self.bars.length);
     var width_changed = self.animateWidth(),
         height_finished = true;
@@ -70,28 +76,26 @@ Graphtacular.prototype.animate = function (self) {
 }
 
 Graphtacular.prototype.getHighestValue = function() {
-    var highest_value = 0;
+    var values = [];
     for (var i = 0; i < this.bars.length; i++) {
-        var bar = this.bars[i];
-        if (bar.value > highest_value) {
-            highest_value = bar.value;
-        };
+        bar = this.bars[i];
+        values.push(bar.value);
     };
-    return highest_value;
+
+    return Array.max(values);
 };
 
 Graphtacular.prototype.drawAxis = function() {
     this._context.beginPath();
-    this._context.moveTo(this.side_padding - 5, 5);
+    this._context.moveTo(this.side_padding - 5, this.top_padding);
     this._context.lineTo(this.side_padding - 5, this._context.canvas.height - 10);
     this._context.lineWidth = 2;
     this._context.stroke();
-    //this._context.endPath();
 
     var increment =  this._context.canvas.height / this.increment,
         value_increment = Math.floor(this.getHighestValue() / this.increment);
-    for (var i = 1; i < this.increment; i++) {
-        var y = i * increment,
+    for (var i = 0; i < this.increment; i++) {
+        var y = i * increment + this.top_padding,
             val = (this.increment - i) * value_increment;
         this._context.beginPath();
         this._context.moveTo(this.side_padding - 10, y);
@@ -99,13 +103,13 @@ Graphtacular.prototype.drawAxis = function() {
         this._context.stroke();
         context.fillStyle = this.text_color;
         this._context.fillText(val, 0, y + 5);
-        //this._context.endPath();
     };
 };
 
 Graphtacular.prototype.drawFrame = function() {
     canvas.width = canvas.width;
     var x = this.side_padding;
+    var context = this._context;
     //TODO: Here is where we will set all of the graph styling
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
@@ -114,11 +118,15 @@ Graphtacular.prototype.drawFrame = function() {
         //console.log(bar_height);
         var bar_height = this.getPixelHeight(bar.height);
         context.fillStyle = bar.color;
-        this._context.fillRect(x, this._context.canvas.height - 10 - bar_height, bar.width, bar_height);
+        context.fillRect(x, context.canvas.height - 10 - bar_height, bar.width, bar_height);
 
         context.fillStyle = this.text_color;
-        this._context.fillText(bar.label, x, this._context.canvas.height);
+        context.save();
+        context.translate(x + bar.width / 2, context.canvas.height);
+        context.rotate(-Math.PI / 2);
+        context.fillText(bar.label, 0, 0);
         x += bar.width+ this.bar_padding;
+        context.restore();
     }
 }
 
