@@ -7,7 +7,7 @@
 <body>
 	<canvas id="canvas" width="800" height="300"></canvas>
 	<div id="slider">
-		January <input id="slide" type="range" min="1" max="12" step="1" value="100" /> December
+		January <input id="slide" type="range" min="0" max="11" step="1" value="0" /> December
 	</div>
 </body>
 <script src="graphtacular.js"></script>
@@ -24,7 +24,23 @@
 	var slide = document.getElementById('slide');
 
 	slide.onchange = function (e) {
-		console.log(slide.value);
+			$.getJSON('monthavgs.json', function(data) {
+			var jsonData = [];
+			$.each(data, function() {
+				var average = this.avgs[slide.value];
+				var event = this.event;
+				if(average >= 1){
+					//console.log(event);
+					//console.log(average);
+					jsonData.push({label : event, value: average});
+				}
+			});
+			var jsonObj = {'data':jsonData};
+			console.log(slide.value);
+			graph = new Graphtacular(context,jsonObj);
+
+			//graph.data = jsonObj;
+		});
 	};
 
 
