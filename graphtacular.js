@@ -1,7 +1,7 @@
-
 Array.max = function (array) {
     return Math.max.apply(Math, array);
 };
+
 //TODO: Write a scale or something
 function Graphtacular (context, options) {
     this._context = context;

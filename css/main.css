@@ -1,0 +1,17 @@
+body{
+	background: #f3f3f3;
+	font-family: Verdana, sans-serif;
+	color: #444;
+}
+
+#time input{
+	font-family: 'Arial';
+	font-size: 30px;
+	color: slategrey;
+	font-weight: 900;
+}
+
+.container {
+	width: 800px;
+	margin: 20px auto;
+}
