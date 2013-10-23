@@ -5,12 +5,12 @@
 	<title>Test</title>
 	<style>
 		body{
-				background: 'lightgrey';
+				background: lightgrey;
 			}
 			#time input{
-				font-family: 'Arial';
-				font-size: 30px;
-				color: 'slategrey';
+				font-family: Arial;
+				font-size: 20px;
+				color: slategray;
 				font-weight: 900;
 			}
 	</style>
@@ -32,6 +32,7 @@
 		graph,
 		slide = document.getElementById('slide'),
 		global_data = {};
+		
 	slide.onchange = function (e) {
 		global_data.forEach(function (thing) {
 			var average = thing.avgs[slide.value];
@@ -59,7 +60,7 @@
 		
 		
 		$('#time').round_slider({
-					list: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2],
+					list: ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February'],
 				
 					min: 0,
 					max: 359,
@@ -69,6 +70,14 @@
 					input_bg: 'img/input/glass.png',
 					points_bg: 'img/points/numerals.png',
 					
+					angle_changed_callback : function(value){
+						global_data.forEach(function (thing) {
+							var average = thing.avgs[value];
+							if (average >= 1) {
+								graph.changeBar(thing.event, average);
+							};
+						});
+					}
 				});
 	});
 
