@@ -28,19 +28,36 @@
 <script src="js/round-slider.min.js"></script>
 
 <script>
-	var context = document.getElementById('canvas').getContext('2d'),
+	var canvas = document.getElementById('canvas'),
+		context = canvas.getContext('2d'),
 		graph,
 		slide = document.getElementById('slide'),
 		global_data = {};
 	slide.onchange = function (e) {
 		global_data.forEach(function (thing) {
+			console.log(global_data);
 			var average = thing.avgs[slide.value];
-			if (average >= 1) {
+			if (true) {
 				graph.changeBar(thing.event, average);
 			};
 		});
 	};
 
+	canvas.addEventListener('mousemove', function (event) {
+		var mousePos = getMousePos(canvas, evt);
+		var result = graph.checkHover(mousePos);
+		if(result !== false) {
+
+		}
+	});
+
+	function getMousePos(canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return {
+			x: evt.clientX - rect.left,
+			y: evt.clientY - rect.top
+		};
+	}
 
 	$(document).ready(function(){
 		$.getJSON('monthavgs.json', function(data) {
@@ -53,7 +70,9 @@
 					jsonData.push({label : event, value: average});
 				}
 			});
-			var jsonObj = {'data':jsonData};
+			var jsonObj = {
+				'data':jsonData
+			};
 			graph = new Graphtacular(context,jsonObj);
 		});
 		
