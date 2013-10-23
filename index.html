@@ -3,25 +3,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test</title>
-	<style>
-		body{
-				background: lightgrey;
-			}
-			#time input{
-				font-family: Arial;
-				font-size: 20px;
-				color: slategray;
-				font-weight: 900;
-			}
-	</style>
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-	<canvas id="canvas" width="800" height="300"></canvas>
-	<div id="slider">
-		January <input id="slide" type="range" min="0" max="11" step="1" value="0" /> December
-	</div>
+	<div class="container">
+                <h1>Cool Crime Data</h1>
+                <canvas id="canvas" width="1200" height="500"></canvas>
+                <div id="slider">
+                        January <input id="slide" type="range" min="0" max="11" step="1" value="0" /> December
+                </div>
 
-	<div id = "time"></div>
+                <div id = "time"></div>
+    </div>
 </body>
 <script src="graphtacular.js"></script>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
