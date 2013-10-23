@@ -5,12 +5,12 @@
 	<title>Test</title>
 	<style>
 		body{
-				background: lightgrey;
+				background: 'lightgrey';
 			}
 			#time input{
 				font-family: 'Arial';
 				font-size: 30px;
-				color: slategrey;
+				color: 'slategrey';
 				font-weight: 900;
 			}
 	</style>
@@ -28,16 +28,10 @@
 <script src="js/round-slider.min.js"></script>
 
 <script>
-	var context = document.getElementById('canvas').getContext('2d');
-	var graph;
-	/*var graph = new Graphtacular(context, {'data':[
-		{label: 'label1', value: 50},
-		{label: 'label2', value: 100},
-		{label: 'label3', value: 200},
-		{label: 'label4', value: 300}
-	]});*/
-	var slide = document.getElementById('slide');
-	var global_data = {};
+	var context = document.getElementById('canvas').getContext('2d'),
+		graph,
+		slide = document.getElementById('slide'),
+		global_data = {};
 	slide.onchange = function (e) {
 		global_data.forEach(function (thing) {
 			var average = thing.avgs[slide.value];
@@ -56,8 +50,6 @@
 				var average = this.avgs[0];
 				var event = this.event;
 				if(average >= 1){
-					//console.log(event);
-					//console.log(average);
 					jsonData.push({label : event, value: average});
 				}
 			});
