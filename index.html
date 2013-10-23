@@ -3,45 +3,54 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test</title>
-	<style>
-		body{
-				background: lightgrey;
-			}
-			#time input{
-				font-family: Arial;
-				font-size: 20px;
-				color: slategray;
-				font-weight: 900;
-			}
-	</style>
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-	<canvas id="canvas" width="800" height="300"></canvas>
-	<div id="slider">
-		January <input id="slide" type="range" min="0" max="11" step="1" value="0" /> December
-	</div>
+	<div class="container">
+		<h1>Cool Crime Data</h1>
+		<canvas id="canvas" width="800" height="300"></canvas>
+		<div id="slider">
+			January <input id="slide" type="range" min="0" max="11" step="1" value="0" /> December
+		</div>
 
-	<div id = "time"></div>
+		<div id = "time"></div>
+	</div>
 </body>
 <script src="graphtacular.js"></script>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="js/round-slider.min.js"></script>
 
 <script>
-	var context = document.getElementById('canvas').getContext('2d'),
+	var canvas = document.getElementById('canvas'),
+		context = canvas.getContext('2d'),
 		graph,
 		slide = document.getElementById('slide'),
 		global_data = {};
-		
 	slide.onchange = function (e) {
 		global_data.forEach(function (thing) {
+			console.log(global_data);
 			var average = thing.avgs[slide.value];
-			if (average >= 1) {
+			if (true) {
 				graph.changeBar(thing.event, average);
 			};
 		});
 	};
 
+	canvas.addEventListener('mousemove', function (event) {
+		var mousePos = getMousePos(canvas, evt);
+		var result = graph.checkHover(mousePos);
+		if(result !== false) {
+
+		}
+	});
+
+	function getMousePos(canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return {
+			x: evt.clientX - rect.left,
+			y: evt.clientY - rect.top
+		};
+	}
 
 	$(document).ready(function(){
 		$.getJSON('monthavgs.json', function(data) {
@@ -54,13 +63,15 @@
 					jsonData.push({label : event, value: average});
 				}
 			});
-			var jsonObj = {'data':jsonData};
+			var jsonObj = {
+				'data':jsonData
+			};
 			graph = new Graphtacular(context,jsonObj);
 		});
 		
 		
 		$('#time').round_slider({
-					list: ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February'],
+					list: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2],
 				
 					min: 0,
 					max: 359,
@@ -70,14 +81,6 @@
 					input_bg: 'img/input/glass.png',
 					points_bg: 'img/points/numerals.png',
 					
-					angle_changed_callback : function(value){
-						global_data.forEach(function (thing) {
-							var average = thing.avgs[value];
-							if (average >= 1) {
-								graph.changeBar(thing.event, average);
-							};
-						});
-					}
 				});
 	});
 

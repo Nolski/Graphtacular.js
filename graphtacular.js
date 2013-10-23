@@ -1,7 +1,7 @@
-
 Array.max = function (array) {
     return Math.max.apply(Math, array);
 };
+
 //TODO: Write a scale or something
 function Graphtacular (context, options) {
     this._context = context;
@@ -138,6 +138,8 @@ Graphtacular.prototype.drawBar = function(bar, x) {
     context.stroke();
     context.fillRect(x, context.canvas.height - 10 - bar_height, bar.width, bar_height);
     context.strokeRect(x, context.canvas.height - 10 - bar_height, bar.width, bar_height);
+    bar.x = x;
+
 };
 
 Graphtacular.prototype.drawLabel = function(bar, x) {
@@ -150,10 +152,15 @@ Graphtacular.prototype.drawLabel = function(bar, x) {
     context.restore();
 };
 
-Graphtacular.prototype.checkHover = function() {
-    this.bars.forEach(function (bar) {
-        
-    });
+Graphtacular.prototype.checkHover = function(mousePos) {
+    for(var i = 0; i < this.bars.length; i++) {
+        var bar = this.bars[i];
+        if (mousePos.x > bar.x && mousePos.x < (bar.x + this.bar_width)
+            && mousePos.y > 0 && mousePos.y < bar.height ) {
+            return i;
+        };
+    };
+    return false;
 };
 
 Graphtacular.prototype.animateWidth = function () {
@@ -199,4 +206,5 @@ function Bar (graph, label, value, options) {
     this.value = value;
     this.label = label;
     this.height = 0;
+    this.x = 0;
 }
