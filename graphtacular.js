@@ -15,12 +15,23 @@ function Graphtacular (context, options) {
     this.increment = 10;
     this.top_padding = 20;
     this.text_color = (options.text_color || '#000');
+    this.bar_fill = (options.bar_fill || '#00FFFF');
+    this.bar_stroke = (options.bar_fill || '#000');
+    this.bar_line_width = (options.bar_line_width || 3);
+    this.bar_alpha = (options.bar_alpha || 1.0);
+
     for(var i=0; i < this.data.length; i++) {
         var bar = this.data[i];
         if (this.bars == undefined) {
             this.bars = [];
         }
-        this.bars.push(new Bar(this, bar.label, bar.value));
+        this.bars.push(
+            new Bar(this, bar.label, bar.value, {
+                bar_fill: this.bar_fill,
+                bar_stroke: this.bar_stroke,
+                line_width: this.bar_line_width
+            })
+        );
     };
     this.animate(this);
 }
@@ -112,21 +123,45 @@ Graphtacular.prototype.drawFrame = function() {
     //TODO: Here is where we will set all of the graph styling
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
-        //var bar_height = this._context.canvas.height * (bar.height / 100); //TODO: What is this
-        //bar_height = -Math.abs(bar_height);
-        var bar_height = this.getPixelHeight(bar.height);
-        context.fillStyle = bar.color;
-        context.fillRect(x, context.canvas.height - 10 - bar_height, bar.width, bar_height);
-
-        context.fillStyle = this.text_color;
-        context.save();
-        context.translate(x + bar.width / 2, context.canvas.height);
-        context.rotate(-Math.PI / 2);
-        context.fillText(bar.label, 0, 0);
+        this.drawBar(bar, x);
+        this.drawLabel(bar, x);
         x += bar.width+ this.bar_padding;
-        context.restore();
     }
 }
+
+Graphtacular.prototype.drawBar = function(bar, x) {
+    var bar_height = this.getPixelHeight(bar.height);
+    //Draw bar
+    context.fillStyle = bar.color;
+    context.strokeStyle = bar.stroke;
+    context.lineWidth = bar.line_width;
+    context.stroke();
+    context.fillRect(x, context.canvas.height - 10 - bar_height, bar.width, bar_height);
+    context.strokeRect(x, context.canvas.height - 10 - bar_height, bar.width, bar_height);
+    bar.x = x;
+
+};
+
+Graphtacular.prototype.drawLabel = function(bar, x) {
+    //Draw label
+    context.fillStyle = this.text_color;
+    context.save();
+    context.translate(x - 1, context.canvas.height - 10);
+    context.rotate(-Math.PI / 2);
+    context.fillText(bar.label, 0, 0);
+    context.restore();
+};
+
+Graphtacular.prototype.checkHover = function(mousePos) {
+    for(var i = 0; i < this.bars.length; i++) {
+        var bar = this.bars[i];
+        if (mousePos.x > bar.x && mousePos.x < (bar.x + this.bar_width)
+            && mousePos.y > 0 && mousePos.y < bar.height ) {
+            return i;
+        };
+    };
+    return false;
+};
 
 Graphtacular.prototype.animateWidth = function () {
     var changed = false;
@@ -164,9 +199,12 @@ Graphtacular.prototype.animateHeight = function() {
 //TODO: __defineGetter__ and __defineSetter__ are apparently depricated
 function Bar (graph, label, value, options) {
     var options = (options || {});
-    this.color = (options.color || '#0000FF');
+    this.color = options.bar_fill;
+    this.stroke = options.bar_stroke;
+    this.alpha = options.bar_alpha;
     this.width = graph.bar_width;
     this.value = value;
     this.label = label;
     this.height = 0;
+    this.x = 0;
 }

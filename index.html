@@ -3,7 +3,21 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test</title>
+<<<<<<< HEAD
 	<link rel="stylesheet" href="css/main.css">
+=======
+	<style>
+		body{
+				background: 'lightgrey';
+			}
+			#time input{
+				font-family: 'Arial';
+				font-size: 30px;
+				color: 'slategrey';
+				font-weight: 900;
+			}
+	</style>
+>>>>>>> d1a602cb72bb645a1ef0128917ea170c6ef26aca
 </head>
 <body>
 	<div class="container">
@@ -21,25 +35,36 @@
 <script src="js/round-slider.min.js"></script>
 
 <script>
-	var context = document.getElementById('canvas').getContext('2d');
-	var graph;
-	/*var graph = new Graphtacular(context, {'data':[
-		{label: 'label1', value: 50},
-		{label: 'label2', value: 100},
-		{label: 'label3', value: 200},
-		{label: 'label4', value: 300}
-	]});*/
-	var slide = document.getElementById('slide');
-	var global_data = {};
+	var canvas = document.getElementById('canvas'),
+		context = canvas.getContext('2d'),
+		graph,
+		slide = document.getElementById('slide'),
+		global_data = {};
 	slide.onchange = function (e) {
 		global_data.forEach(function (thing) {
+			console.log(global_data);
 			var average = thing.avgs[slide.value];
-			if (average >= 1) {
+			if (true) {
 				graph.changeBar(thing.event, average);
 			};
 		});
 	};
 
+	canvas.addEventListener('mousemove', function (event) {
+		var mousePos = getMousePos(canvas, evt);
+		var result = graph.checkHover(mousePos);
+		if(result !== false) {
+
+		}
+	});
+
+	function getMousePos(canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return {
+			x: evt.clientX - rect.left,
+			y: evt.clientY - rect.top
+		};
+	}
 
 	$(document).ready(function(){
 		$.getJSON('monthavgs.json', function(data) {
@@ -49,12 +74,12 @@
 				var average = this.avgs[0];
 				var event = this.event;
 				if(average >= 1){
-					//console.log(event);
-					//console.log(average);
 					jsonData.push({label : event, value: average});
 				}
 			});
-			var jsonObj = {'data':jsonData};
+			var jsonObj = {
+				'data':jsonData
+			};
 			graph = new Graphtacular(context,jsonObj);
 		});
 		
