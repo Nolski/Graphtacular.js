@@ -16,7 +16,7 @@ function Graphtacular (context, options) {
     this.top_padding = 20;
     this.text_color = (options.text_color || '#000');
     this.bar_fill = (options.bar_fill || '#00FFFF');
-    this.bar_stroke = (options.bar_fill || '#000');
+    this.bar_stroke = (options.bar_stroke || '#000');
     this.bar_line_width = (options.bar_line_width || 3);
     this.bar_alpha = (options.bar_alpha || 1.0);
 
@@ -145,6 +145,7 @@ Graphtacular.prototype.drawBar = function(bar, x) {
 Graphtacular.prototype.drawLabel = function(bar, x) {
     //Draw label
     context.fillStyle = this.text_color;
+    context.font = 'Arial';
     context.save();
     context.translate(x - 1, context.canvas.height - 10);
     context.rotate(-Math.PI / 2);
@@ -197,11 +198,11 @@ Graphtacular.prototype.animateHeight = function() {
 
 //TODO: Do a better job at normalizing bar heights when < canvas height
 //TODO: __defineGetter__ and __defineSetter__ are apparently depricated
-function Bar (graph, label, value, options) {
+function Bar (graph, label, value) {
     var options = (options || {});
-    this.color = options.bar_fill;
-    this.stroke = options.bar_stroke;
-    this.alpha = options.bar_alpha;
+    this.color = graph.bar_fill;
+    this.stroke = graph.bar_stroke;
+    this.alpha = graph.bar_alpha;
     this.width = graph.bar_width;
     this.value = value;
     this.label = label;

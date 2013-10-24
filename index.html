@@ -13,15 +13,15 @@
 				color: slategray;
 				font-weight: 900;
 			}
+			.round-slider-handle {
+				z-index: 100;
+			}
 	</style>
 </head>
 <body>
 	<canvas id="canvas" width="800" height="300"></canvas>
-	<div id="slider">
-		January <input id="slide" type="range" min="0" max="11" step="1" value="0" /> December
-	</div>
-
 	<div id = "time"></div>
+	<h1 style="font-family: Arial; position: fixed;	right: 0; bottom: 0;"> Average Monthly Crime Rate</h1>
 </body>
 <script src="graphtacular.js"></script>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
@@ -31,18 +31,11 @@
 	var context = document.getElementById('canvas').getContext('2d'),
 		graph,
 		slide = document.getElementById('slide'),
-		global_data = {};
-		
-	var x = null;
+		global_data = {},
+		global_value = 'March';
 	
-	slide.onchange = function (e) {
-		global_data.forEach(function (thing) {
-			var average = thing.avgs[slide.value];
-			if (average >= 1) {
-				graph.changeBar(thing.event, average);
-			};
-		});
-	};
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight - 240;
 
 
 	$(document).ready(function(){
@@ -56,14 +49,17 @@
 					jsonData.push({label : event, value: average});
 				}
 			});
-			var jsonObj = {'data':jsonData};
-			graph = new Graphtacular(context,jsonObj);
+			var options = {
+				'data':jsonData,
+				bar_fill: '#A8BDB0',
+				bar_stroke: '#336666'
+			};
+			graph = new Graphtacular(context,options);
 		});
 		
-		
+		var list = ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February'];
 		$('#time').round_slider({
-					list: ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February'],
-				
+					list: list,
 					min: 0,
 					max: 359,
 					
@@ -73,12 +69,14 @@
 					points_bg: 'img/points/numerals.png',
 					
 					angle_changed_callback : function(value){
-						global_data.forEach(function (thing) {
-							var average = thing.avgs[value];
-							if (average >= 1) {
-								graph.changeBar(thing.event, average);
-							};
-						});
+						if (global_value != value) {
+							global_data.forEach(function (thing) {
+								var average = thing.avgs[list.indexOf(value)];
+								if (average >= 1) {
+									graph.changeBar(thing.event, average);
+								};
+							});
+						};
 					}
 				});
 	});
