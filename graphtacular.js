@@ -5,13 +5,16 @@ Array.max = function (array) {
 //TODO: Write a scale or something
 function Graphtacular (context, options) {
     this._context = context;
+    this._hovering = false;
+    this.active_bar = null;
+    this.mousePos = {x: 0, y:0};
     this.data = (options.data || []);
     this.bar_padding = 10;
     this.bar_width = 0;
     this.animateId;
     this.bars = null;
     this.max = -1;
-    this.side_padding = 40;
+    this.side_padding = 30;
     this.increment = 10;
     this.top_padding = 20;
     this.text_color = (options.text_color || '#000');
@@ -33,6 +36,12 @@ function Graphtacular (context, options) {
             })
         );
     };
+
+    var self = this
+    this._context.canvas.addEventListener('mousemove', function (evt) {
+        self.mousePos = self.getMousePos(evt);
+        self.checkHover();
+    });
     this.animate(this);
 }
 
@@ -49,6 +58,23 @@ Graphtacular.prototype.getPixelHeight = function(height) {
     height = Math.floor(height * (canvas_max / (this.max)));
 
     return height;
+};
+
+Graphtacular.prototype.getMousePos = function(evt) {
+    var rect = this._context.canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
+};
+
+Graphtacular.prototype.getCanvasPoint = function(x, y) {
+    var rect = this._context.canvas.getBoundingClientRect();
+    console.log(rect.left);
+    return {
+        x: x + rect.left,
+        y: y + rect.top
+    }
 };
 
 Graphtacular.prototype.addBars = function(bars) {
@@ -118,7 +144,7 @@ Graphtacular.prototype.drawAxis = function() {
 
 Graphtacular.prototype.drawFrame = function() {
     canvas.width = canvas.width;
-    var x = this.side_padding;
+    var x = this.side_padding + 10;
     var context = this._context;
     //TODO: Here is where we will set all of the graph styling
     for (var i = 0; i < this.bars.length; i++) {
@@ -131,6 +157,8 @@ Graphtacular.prototype.drawFrame = function() {
 
 Graphtacular.prototype.drawBar = function(bar, x) {
     var bar_height = this.getPixelHeight(bar.height);
+    
+    var context = this._context;
     //Draw bar
     context.fillStyle = bar.color;
     context.strokeStyle = bar.stroke;
@@ -143,6 +171,7 @@ Graphtacular.prototype.drawBar = function(bar, x) {
 };
 
 Graphtacular.prototype.drawLabel = function(bar, x) {
+    var context = this._context;
     //Draw label
     context.fillStyle = this.text_color;
     context.font = 'Arial';
@@ -153,14 +182,25 @@ Graphtacular.prototype.drawLabel = function(bar, x) {
     context.restore();
 };
 
-Graphtacular.prototype.checkHover = function(mousePos) {
+Graphtacular.prototype.checkHover = function() {
     for(var i = 0; i < this.bars.length; i++) {
-        var bar = this.bars[i];
-        if (mousePos.x > bar.x && mousePos.x < (bar.x + this.bar_width)
-            && mousePos.y > 0 && mousePos.y < bar.height ) {
+        var bar = this.bars[i],
+            bar_height = this.getPixelHeight(bar.height);
+            bar_coords = {x: bar.x, y: context.canvas.height - 10 - bar_height},
+            bar_coords.y = bar_coords.y;
+        //console.log(i, bar_coords, this.mousePos, bar_height, bar.x);
+        if (this.mousePos.x > bar_coords.x && this.mousePos.x < (bar_coords.x + this.bar_width)
+            && this.mousePos.y < bar_coords.y + bar_height && this.mousePos.y > bar_coords.y ) {
+            this.active_bar = this.bars[i];
+            this._hovering = true;
+            bar.color = '#00FF00';
+            console.log('yes');
             return i;
-        };
+        } else {
+            bar.color = this.bar_fill;
+        }
     };
+    this._hovering = false;
     return false;
 };
 

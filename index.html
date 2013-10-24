@@ -9,8 +9,6 @@
 	<div class="container">
                 <h1>Cool Crime Data</h1>
                 <canvas id="canvas" width="1200" height="500"></canvas>
-
-                <div id = "time"></div>
     </div>
 </body>
 <script src="graphtacular.js"></script>
@@ -27,50 +25,25 @@
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight - 240;
 
+	var jsonData = [{
+		label: 'Label 1',
+		value: 200
+	}, {
+		label: 'Label 2',
+		value: 150
+	}, {
+		label: 'Label 3',
+		value: 250
+	}, {
+		label: 'Label 4',
+		value: 175
+	}]
 
-	$(document).ready(function(){
-		$.getJSON('monthavgs.json', function(data) {
-			global_data = data;
-			var jsonData = [];
-			$.each(data, function() {
-				var average = this.avgs[0];
-				var event = this.event;
-				if(average >= 1){
-					jsonData.push({label : event, value: average});
-				}
-			});
-			var options = {
-				'data':jsonData,
-				bar_fill: '#A8BDB0',
-				bar_stroke: '#336666'
-			};
-			graph = new Graphtacular(context,options);
-		});
-		
-		var list = ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February'];
-		$('#time').round_slider({
-					list: list,
-					min: 0,
-					max: 359,
-					
-					bg: 'img/bg/watch.png',
-					handle_bg: 'img/handles/dot.png',
-					input_bg: 'img/input/glass.png',
-					points_bg: 'img/points/numerals.png',
-					
-					angle_changed_callback : function(value){
-						if (global_value != value) {
-							global_data.forEach(function (thing) {
-								var average = thing.avgs[list.indexOf(value)];
-								if (average >= 1) {
-									graph.changeBar(thing.event, average);
-								};
-							});
-						};
-					}
-				});
-	});
-
-
+	var options = {
+		'data':jsonData,
+		bar_fill: '#A8BDB0',
+		bar_stroke: '#336666'
+	};
+	graph = new Graphtacular(context,options);
 </script>
 </html>
