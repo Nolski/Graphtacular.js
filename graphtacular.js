@@ -18,12 +18,13 @@ function Graphtacular (context, options) {
     this.increment = 10;
     this.top_padding = 20;
     this.text_color = (options.text_color || '#000');
-    this.bar_fill = (options.bar_fill || '#00FFFF');
+    //this.bar_fill = this.getRandomColor();
     this.bar_stroke = (options.bar_stroke || '#000');
     this.bar_line_width = (options.bar_line_width || 3);
     this.bar_alpha = (options.bar_alpha || 1.0);
 
     for(var i=0; i < this.data.length; i++) {
+    	this.bar_fill = this.getRandomColor();
         var bar = this.data[i];
         if (this.bars == undefined) {
             this.bars = [];
@@ -155,9 +156,12 @@ Graphtacular.prototype.drawFrame = function() {
     }
 }
 
+
+
+
 Graphtacular.prototype.drawBar = function(bar, x) {
     var bar_height = this.getPixelHeight(bar.height);
-    
+
     var context = this._context;
     //Draw bar
     context.fillStyle = bar.color;
@@ -235,6 +239,16 @@ Graphtacular.prototype.animateHeight = function() {
     };
     return changed;
 };
+
+
+Graphtacular.prototype.getRandomColor = function() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
+}
 
 //TODO: Do a better job at normalizing bar heights when < canvas height
 //TODO: __defineGetter__ and __defineSetter__ are apparently depricated
