@@ -8,7 +8,7 @@
 <body>
 	<div class="container">
                 <h1>Cool Crime Data</h1>
-                <canvas id="canvas" width="1200" height="500"></canvas>
+                <canvas id="canvas" width="800" height="500"></canvas>
     </div>
 </body>
 <script src="graphtacular.js"></script>
@@ -21,8 +21,8 @@
 		slide = document.getElementById('slide'),
 		global_data = {},
 		global_value = 'March';
-	
-	canvas.width = window.innerWidth;
+
+	canvas.width = window.innerWidth - 340;
 	canvas.height = window.innerHeight - 240;
 
 	var jsonData = [{
