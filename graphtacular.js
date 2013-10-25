@@ -14,7 +14,7 @@ function Graphtacular (context, options) {
     this.animateId;
     this.bars = null;
     this.max = -1;
-    this.side_padding = 30;
+    this.side_padding = 50;
     this.increment = 10;
     this.top_padding = 20;
     this.text_color = (options.text_color || '#000');
@@ -187,8 +187,8 @@ Graphtacular.prototype.drawKey = function(bar,y){
     context.fillRect(context.canvas.width - 30, y, 20, 20);
     context.strokeRect(context.canvas.width - 30, y, 20, 20);
     context.fillStyle = this.text_color;
-    context.font = "Arial";
-    context.fillText(bar.label,context.canvas.width - 80, y+15);
+    context.font = "16px Arial";
+    context.fillText(bar.label,context.canvas.width - 100, y+18);
 };
 
 
