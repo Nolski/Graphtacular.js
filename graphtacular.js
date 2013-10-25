@@ -146,15 +146,18 @@ Graphtacular.prototype.drawAxis = function() {
 Graphtacular.prototype.drawFrame = function() {
     canvas.width = canvas.width;
     var x = this.side_padding + 10;
+    var y = 0;
     var context = this._context;
     //TODO: Here is where we will set all of the graph styling
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
         this.drawBar(bar, x);
-        this.drawLabel(bar, x);
+       // this.drawLabel(bar, x);
+       this.drawKey(bar,y);
         x += bar.width+ this.bar_padding;
+        y += 30;
     }
-}
+};
 
 
 
@@ -173,6 +176,21 @@ Graphtacular.prototype.drawBar = function(bar, x) {
     bar.x = x;
 
 };
+
+
+Graphtacular.prototype.drawKey = function(bar,y){
+	var context = this._context;
+	context.fillStyle = bar.color;
+	context.strokeStyle = bar.stroke;
+    context.lineWidth = bar.line_width;
+    context.stroke();
+    context.fillRect(context.canvas.width - 30, y, 20, 20);
+    context.strokeRect(context.canvas.width - 30, y, 20, 20);
+    context.fillStyle = this.text_color;
+    context.font = "Arial";
+    context.fillText(bar.label,context.canvas.width - 80, y+15);
+};
+
 
 Graphtacular.prototype.drawLabel = function(bar, x) {
     var context = this._context;
