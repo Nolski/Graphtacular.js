@@ -2,7 +2,6 @@ Array.max = function (array) {
     return Math.max.apply(Math, array);
 };
 
-//TODO: Write a scale or something
 function Graphtacular (context, options) {
     this._context = context;
     this._hovering = false;
@@ -148,19 +147,15 @@ Graphtacular.prototype.drawFrame = function() {
     var x = this.side_padding + 10;
     var y = 0;
     var context = this._context;
-    //TODO: Here is where we will set all of the graph styling
     for (var i = 0; i < this.bars.length; i++) {
         var bar = this.bars[i];
         this.drawBar(bar, x);
-       // this.drawLabel(bar, x);
-       this.drawKey(bar,y);
+        this.drawKey(bar,y);
         x += bar.width+ this.bar_padding;
         y += 30;
     }
+    this.drawContextBox();
 };
-
-
-
 
 Graphtacular.prototype.drawBar = function(bar, x) {
     var bar_height = this.getPixelHeight(bar.height);
@@ -183,7 +178,6 @@ Graphtacular.prototype.drawKey = function(bar,y){
 	context.fillStyle = bar.color;
 	context.strokeStyle = bar.stroke;
     context.lineWidth = bar.line_width;
-    context.stroke();
     context.fillRect(context.canvas.width - 30, y, 20, 20);
     context.strokeRect(context.canvas.width - 30, y, 20, 20);
     context.fillStyle = this.text_color;
@@ -202,6 +196,18 @@ Graphtacular.prototype.drawLabel = function(bar, x) {
     context.rotate(-Math.PI / 2);
     context.fillText(bar.label, 0, 0);
     context.restore();
+};
+
+Graphtacular.prototype.drawContextBox = function() {
+    if (this._hovering) {
+        context.fillStyle = "#FFF";
+        context.strokeStyle = "#202020";
+        context.lineWidth = 3;
+        context.font = 'Arial';
+        context.rect(this.mousePos.x, this.mousePos.y, 50, 50);
+        context.fill();
+        context.stroke();
+    };
 };
 
 Graphtacular.prototype.checkHover = function() {
@@ -268,8 +274,6 @@ Graphtacular.prototype.getRandomColor = function() {
     return color;
 }
 
-//TODO: Do a better job at normalizing bar heights when < canvas height
-//TODO: __defineGetter__ and __defineSetter__ are apparently depricated
 function Bar (graph, label, value) {
     var options = (options || {});
     this.color = graph.bar_fill;
