@@ -199,14 +199,26 @@ Graphtacular.prototype.drawLabel = function(bar, x) {
 };
 
 Graphtacular.prototype.drawContextBox = function() {
+    var context = this._context;
+
     if (this._hovering) {
+        var label = this.active_bar.label,
+            x_padding = 10,
+            y_padding = 5;
+        
+        metrics = context.measureText(label);
+        console.log(metrics.height);
+        context.font = '16px Arial';
+        context.textAlign = 'left';
         context.fillStyle = "#FFF";
         context.strokeStyle = "#202020";
         context.lineWidth = 3;
         context.font = 'Arial';
-        context.rect(this.mousePos.x, this.mousePos.y, 50, 50);
+        context.rect(this.mousePos.x, this.mousePos.y, metrics.width + (x_padding * 2), 16 + (y_padding * 2));
         context.fill();
         context.stroke();
+        context.fillStyle = '#202020';
+        context.fillText(label, this.mousePos.x + x_padding, this.mousePos.y + 16 + y_padding);
     };
 };
 
@@ -221,11 +233,7 @@ Graphtacular.prototype.checkHover = function() {
             && this.mousePos.y < bar_coords.y + bar_height && this.mousePos.y > bar_coords.y ) {
             this.active_bar = this.bars[i];
             this._hovering = true;
-            bar.color = '#00FF00';
-            console.log('yes');
             return i;
-        } else {
-            bar.color = this.bar_fill;
         }
     };
     this._hovering = false;
