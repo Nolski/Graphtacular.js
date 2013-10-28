@@ -17,7 +17,6 @@ function Graphtacular (context, options) {
     this.increment = 10;
     this.top_padding = 20;
     this.text_color = (options.text_color || '#000');
-    //this.bar_fill = this.getRandomColor();
     this.bar_stroke = (options.bar_stroke || '#000');
     this.bar_line_width = (options.bar_line_width || 3);
     this.bar_alpha = (options.bar_alpha || 1.0);
@@ -83,6 +82,8 @@ Graphtacular.prototype.addBars = function(bars) {
         if (self.bars == undefined) {
             self.bars = [];
         }
+        self.bar_fill = self.getRandomColor();
+        console.log(self.bar_fill);
         self.bars.push(new Bar(self, bar.label, bar.value, 0));
     });
 }
@@ -207,7 +208,6 @@ Graphtacular.prototype.drawContextBox = function() {
             y_padding = 5;
         
         metrics = context.measureText(label);
-        console.log(metrics.height);
         context.font = '16px Arial';
         context.textAlign = 'left';
         context.fillStyle = "#FFF";
@@ -283,6 +283,7 @@ Graphtacular.prototype.getRandomColor = function() {
 }
 
 function Bar (graph, label, value) {
+    console.log(graph.bar_fill);
     var options = (options || {});
     this.color = graph.bar_fill;
     this.stroke = graph.bar_stroke;
