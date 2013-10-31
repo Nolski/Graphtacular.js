@@ -1,0 +1,49 @@
+body {
+  background-color: #ecf0f1;
+  color:#2c3e50;
+  font-family: 'Open Sans', sans-serif;
+}
+/*********************************************
+ * HEADERS
+ *********************************************/
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  margin: 0 0 20px 0;
+  line-height: 1em;
+  letter-spacing: 0.02em;
+}
+
+.reveal h1 {
+  font-weight: 600;
+  font-size: 4em;
+}
+
+.reveal h2 {
+  font-weight: 600;
+}
+.reveal small {
+  font-size: .8em;
+}
+
+.reveal a {
+  color: #e74c3c;
+}
+
+.reveal a:visited {
+  color: #c0392b;
+}
+
+.reveal li {
+  line-height: 1.8em;
+  font-size: 1.35em;
+}
+
+
+.reveal .red {
+  color: #e74c3c;
+  font-weight: 700;
+}
