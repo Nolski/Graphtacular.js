@@ -54,7 +54,6 @@ function init() {
         if(e.keyCode === 71) {
             showGraph();
         }
-        console.log(e.keyCode);
     });
 }
 

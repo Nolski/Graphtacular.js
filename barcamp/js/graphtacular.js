@@ -69,7 +69,6 @@ Graphtacular.prototype.getMousePos = function(evt) {
 
 Graphtacular.prototype.getCanvasPoint = function(x, y) {
     var rect = this._context.canvas.getBoundingClientRect();
-    console.log(rect.left);
     return {
         x: x + rect.left,
         y: y + rect.top
@@ -83,7 +82,6 @@ Graphtacular.prototype.addBars = function(bars) {
             self.bars = [];
         }
         self.bar_fill = self.getRandomColor();
-        console.log(self.bar_fill);
         self.bars.push(new Bar(self, bar.label, bar.value, 0));
     });
 }
@@ -283,7 +281,6 @@ Graphtacular.prototype.getRandomColor = function() {
 }
 
 function Bar (graph, label, value) {
-    console.log(graph.bar_fill);
     var options = (options || {});
     this.color = graph.bar_fill;
     this.stroke = graph.bar_stroke;
