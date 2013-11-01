@@ -39,7 +39,7 @@ function Graphtacular (context, options) {
     var self = this
     this._context.canvas.addEventListener('mousemove', function (evt) {
         self.mousePos = self.getMousePos(evt);
-        self.checkHover();
+        //self.checkHover();
     });
     this.animate(this);
 }
